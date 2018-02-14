@@ -14,27 +14,29 @@ int prefixSum(int i) {
   return sum;
 }
 
-void adjust(int k, int v) {
-  k += 1;
-  while (k < 11) {
-    y[k] += v;
-    k += lsb(k);
+void adjust(int i, int v) {
+  i += 1;
+  while (i < 11) {
+    y[i] += v;
+    i += lsb(i);
   }
 }
 
+void update(int i, int v) {
+  // update value in i position with diff value
+  int diff = v - sum(i, i);
+  adjust(i, diff);
+}
+
 int sum(int i, int j) {
+  // make sure for j > i
+  // if j < i then swap i and j
   if (j < i) {
     i ^= j;
     j ^= i;
     i ^= j;
   }
   return prefixSum(j) - prefixSum(i - 1);
-}
-
-void update(int i, int v) {
-  int diff = v - sum(i, i);
-  cout<<diff<<endl;
-  adjust(i, diff);
 }
 
 int main() {
@@ -53,6 +55,7 @@ int main() {
   cout << endl << "=========" << endl;
   cout << prefixSum(5) << endl;
   cout << sum(0, 9) << endl;
+  // update position 0 with value
   update(0, 0);
   for (int i = 0; i <= 10; i++) {
     cout << y[i] << ",";
